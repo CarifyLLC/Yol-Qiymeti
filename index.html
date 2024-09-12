@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yol Pulları</title>
+    <link rel="icon" href="https://i.imgur.com/VJZZZXZ.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            position: relative;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 0px;
+            background: #fff;
+            padding: 20px;
+            padding-bottom: calc(20px + 10%);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            position: relative;
+            box-sizing: border-box;
+            min-height: 50vh;
+        }
+        h1 {
+            text-align: center;
+            font-size: 32px;
+            color: #900000;
+            margin-bottom: 20px;
+            margin-top: 10px;
+            font-weight: bold;
+            padding: 10px 0;
+        }
+        label {
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #900000;
+        }
+        input[type="number"], input[type="text"], select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 18px;
+        }
+        button {
+            width: 35%;
+            padding: 12px;
+            background-color: #900000;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 50px auto 0px;
+            display: block;
+        }
+        button:hover {
+            background-color: #6f0000;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        .message {
+            margin-top: 10px;
+            font-size: 16px;
+            text-align: center;
+            color: green;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Yol Pulları</h1>
+        <form id="shippingForm">
+            <label for="shipLiner">Konteyner Xətti<span style="color:red">*</span></label>
+            <select id="shipLiner" name="shipLiner" required>
+                <option value="" disabled selected>Xətti Seçin</option>
+                <option value="EVERGREEN">EVERGREEN</option>
+                <option value="CMA CGM">CMA CGM</option>
+                <option value="MAERSK">MAERSK</option>
+                <option value="MSC">MSC</option>
+                <option value="YANGMING">YANGMING</option>
+                <option value="HMM">HMM</option>
+                <option value="İran">İran</option>
+                <option value="ZIM">ZIM</option>
+            </select>
+
+            <label for="price">Qiymət <span style="color:red">*</span></label>
+            <input type="number" id="price" name="price" required placeholder="Qiymti USD-lə Daxil Edin" step="0.01" min="0">
+
+            <label for="date">Ay <span style="color:red">*</span></label>
+            <select id="date" name="date" required>
+                <option value="" disabled selected>Ayı Seçin</option>
+                <option value="Yanvar">Yanvar</option>
+                <option value="Fevral">Fevral</option>
+                <option value="Mart">Mart</option>
+                <option value="Aprel">Aprel</option>
+                <option value="May">May</option>
+                <option value="İyun">İyun</option>
+                <option value="İyul">İyul</option>
+                <option value="Avqust">Avqust</option>
+                <option value="Sentyabr">Sentyabr</option>
+                <option value="Oktyabr">Oktyabr</option>
+                <option value="Noyabr">Noyabr</option>
+                <option value="Dekabr">Dekabr</option>
+            </select>
+
+            <label for="newRow">Yeni Cərgə</label>
+            <input type="checkbox" id="newRow" name="newRow"> Yeni cərgəyə əlavə edin!
+
+            <button type="submit">Daxil Et</button>
+            <div class="message" id="message">Məlumatlar uğurla dixil edildi!</div>
+        </form>
+    </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzcUGz8KLyMOr1WfvmENjARR9-1Xs-4ZPClsRT105WnhfGHtFcYWWhnc8e4uy1e54VC/exec';
+        const form = document.getElementById('shippingForm');
+        const message = document.getElementById('message');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            const formData = new FormData(form);
+
+            fetch(scriptURL, { method: 'POST', body: formData })
+                .then(response => response.text())
+                .then(response => {
+                    if (response.includes("Error")) {
+                        message.textContent = response;
+                        message.style.color = 'red';
+                    } else {
+                        message.textContent = 'Məlumatlar uğurla dixil edildi ✔';
+                        message.style.color = 'green';
+                    }
+                    message.style.display = 'block';
+                    setTimeout(() => {
+                        message.style.display = 'none';
+                    }, 3000); // Hide message after 3 seconds
+                })
+                .catch(error => {
+                    message.textContent = 'Error in submission: ' + error.message;
+                    message.style.color = 'red';
+                    message.style.display = 'block';
+                    setTimeout(() => {
+                        message.style.display = 'none';
+                    }, 3000); // Hide message after 3 seconds
+                });
+        });
+    </script>
+</body>
+</html>
